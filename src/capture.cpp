@@ -293,12 +293,7 @@ Capture::~Capture()
 }
 
 std::vector<CaptureDevice> Capture::listCaptureDevices()
-{
-#ifdef _IS_ANDROID_
-    __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "***************** LIST DEVICES START\n");
-#else
-    printf("***************** LIST DEVICES START\n");
-#endif       
+{ 
     std::vector<CaptureDevice> ret;
     if ((result = ma_context_init(NULL, 0, NULL, &context)) != MA_SUCCESS)
     {
@@ -321,29 +316,14 @@ std::vector<CaptureDevice> Capture::listCaptureDevices()
     // the name with their index. You may want
     // to give the user the opportunity to choose which device they'd prefer.
     for (ma_uint32 i = 0; i < captureCount; i++)
-    {
-#ifdef _IS_ANDROID_
-        __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "************ Device: %s %d - %s",
-               pCaptureInfos[i].isDefault ? " X" : "-",
-               i,
-               pCaptureInfos[i].name);
-#else
-        printf("************ Device: %s %d - %s\n",
-            pCaptureInfos[i].isDefault ? " X" : "-",
-            i,
-            pCaptureInfos[i].name);
-#endif        
+    {    
         CaptureDevice cd;
         cd.name = strdup(pCaptureInfos[i].name);
         cd.isDefault = pCaptureInfos[i].isDefault;
         cd.id = i;
         ret.push_back(cd);
     }
-#ifdef _IS_ANDROID_
-    __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "***************** LIST DEVICES END\n");
-#else
-    printf("***************** LIST DEVICES END\n");
-#endif
+
     return ret;
 }
 
